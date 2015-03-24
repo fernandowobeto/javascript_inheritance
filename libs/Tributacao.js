@@ -1,68 +1,79 @@
-/* Simple JavaScript Inheritance */
-(function(){
-   var initializing = false, fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
+define('Tributacao',function(){
+    /* Simple JavaScript Inheritance */
+    var initializing = false, fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
 
-   // The base Class implementation (does nothing)
-   this.Tributacao = function(){};
+    // The base Class implementation (does nothing)
+    this.Tributacao = function(){};
 
-   // Create a new Class that inherits from this class
-   Tributacao.extend = function(prop) {
-      var _super = this.prototype;
+    // Create a new Class that inherits from this class
+    Tributacao.extend = function(prop) {
+        var _super = this.prototype;
 
-      // Instantiate a base class (but only create the instance,
-      // don't run the init constructor)
-      initializing = true;
-      var prototype = new this();
-      initializing = false;
+        // Instantiate a base class (but only create the instance,
+        // don't run the init constructor)
+        initializing = true;
+        var prototype = new this();
+        initializing = false;
 
-      // Copy the properties over onto the new prototype
-      for (var name in prop) {
-         // Check if we're overwriting an existing function
-         prototype[name] = typeof prop[name] == "function" &&
-         typeof _super[name] == "function" && fnTest.test(prop[name]) ?
-            (function(name, fn){
-               return function() {
-                  var tmp = this._super;
+        // Copy the properties over onto the new prototype
+        for (var name in prop) {
+            // Check if we're overwriting an existing function
+            prototype[name] = typeof prop[name] == "function" &&
+            typeof _super[name] == "function" && fnTest.test(prop[name]) ?
+                (function(name, fn){
+                    return function() {
+                        var tmp = this._super;
 
-                  // Add a new ._super() method that is the same method
-                  // but on the super-class
-                  this._super = _super[name];
+                        // Add a new ._super() method that is the same method
+                        // but on the super-class
+                        this._super = _super[name];
 
-                  // The method only need to be bound temporarily, so we
-                  // remove it when we're done executing
-                  var ret = fn.apply(this, arguments);
-                  this._super = tmp;
+                        // The method only need to be bound temporarily, so we
+                        // remove it when we're done executing
+                        var ret = fn.apply(this, arguments);
+                        this._super = tmp;
 
-                  return ret;
-               };
-            })(name, prop[name]) :
-            prop[name];
-      }
+                        return ret;
+                    };
+                })(name, prop[name]) :
+                prop[name];
+        }
 
-      // The dummy class constructor
-      function Tributacao() {
-         // All construction is actually done in the init method
-         if ( !initializing && this.init )
-            this.init.apply(this, arguments);
-      }
+        // The dummy class constructor
+        function Tributacao() {
+            // All construction is actually done in the init method
+            if ( !initializing && this.init ){
+                if(arguments.length){
+                    this.id_cadastro_base = arguments[0];
+                }
+                this.init.apply(this, arguments);
+            }
 
-      // Populate our constructed prototype object
-      Tributacao.prototype = prototype;
+        }
+
+        // Populate our constructed prototype object
+        Tributacao.prototype = prototype;
+
+        Tributacao.prototype.id_cadastro_base = null;
+
+        Tributacao.prototype.diga = function(){
+            alert('diga');
+        }
+
+        Tributacao.prototype.modal = function(){}
+        Tributacao.prototype.acesso = function(){}
+        Tributacao.prototype.post = function(){}
 
 
-      Tributacao.prototype.diga = function(){
 
-         alert('diga');
+        // Enforce the constructor to be what we expect
+        Tributacao.prototype.constructor = Tributacao;
 
-      }
+        // And make this class extendable
+        Tributacao.extend = arguments.callee;
 
+        return Tributacao;
+    };
 
-      // Enforce the constructor to be what we expect
-      Tributacao.prototype.constructor = Tributacao;
-
-      // And make this class extendable
-      Tributacao.extend = arguments.callee;
-
-      return Tributacao;
-   };
-})();
+    return Tributacao;
+});

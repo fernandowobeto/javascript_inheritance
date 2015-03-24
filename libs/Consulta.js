@@ -1,19 +1,17 @@
-require(['Tributacao'], function (Tributacao) {
+define('Consulta', ['Tributacao'], function(Tributacao){
 
-   console.log(Tributacao);
+    return Tributacao.extend({
+
+        init: function(){},
 
 
-   //return window.Consulta = Tributacao.extend({
-   //
-   //   nome: 'Fernando',
-   //
-   //   teste: function () {
-   //
-   //      alert(this.nome);
-   //
-   //   }
-   //});
+        nome: 'Fernando',
+
+        teste: function () {
+
+            alert(this.nome);
+
+        }
+    });
 
 });
-
-
